@@ -5,6 +5,9 @@ from sklearn.model_selection import ParameterGrid
 import multiprocessing
 import os
 
+# Soft modification to test git usabillity
+
+
 def calculate_error(dia, thresh_up, thresh_bot):
     filtered = df.loc[df['dia'] == dia]
     filtered = filtered.assign(prob_thresh=np.nan,
