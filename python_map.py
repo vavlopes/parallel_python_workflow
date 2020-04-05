@@ -2,11 +2,14 @@ import pandas as pd
 import numpy as np
 import random
 from sklearn.model_selection import ParameterGrid
-import multiprocessing
-import os
+import dask
 
 # Soft modification to test git usabillity
+# Appending past modification into current state
+# Lets see what happen
 
+
+@dask.delayed
 def calculate_error(dia, thresh_up, thresh_bot):
     filtered = df.loc[df['dia'] == dia]
     filtered = filtered.assign(prob_thresh=np.nan,
@@ -24,20 +27,17 @@ def calculate_error(dia, thresh_up, thresh_bot):
     erro = np.abs(provisionado_real - provisionado_predito) / provisionado_real
     return(erro)
 
-def calculate_parallel(dict):
-    erro = calculate_error(**dict)
-    return(erro)
-
 if __name__ == "__main__":
 
-    prob_predita = np.random.rand(10000000)
-    prob_real = np.zeros(6000000).tolist()
-    prob_real.extend(np.ones(4000000).tolist())
+    total_length = 10000000
+    prob_predita = np.random.rand(total_length)
+    prob_real = np.zeros(int((3/5)*total_length)).tolist()
+    prob_real.extend(np.ones(int((2/5)*total_length)).tolist())
     random.shuffle(prob_real)
     dia = np.array([1,2,3,4,5])
-    dia = np.repeat(dia,2000000)
+    dia = np.repeat(dia,int((total_length/len(dia)))) #repito 5 dias n vezes para dar o total de registros
     random.shuffle(dia)
-    valor = np.random.randint(low=1, high=1000, size=10000000)
+    valor = np.random.randint(low=1, high=1000, size=total_length)
 
 
     df = pd.DataFrame({'dia':dia,
@@ -51,8 +51,12 @@ if __name__ == "__main__":
 
 	
     lista_iteravel = list(ParameterGrid(grid))
-    pool = multiprocessing.Pool(3)
-    resultados = pool.map(calculate_parallel,lista_iteravel)
+    resultados = list(map(lambda x: calculate_error(**x),lista_iteravel))
+    #total = dask.delayed(sum)(resultados)
+    #total.compute(scheduler='processes',num_workers = 3)
+
+    resultados = dask.compute(*resultados, num_workers = 2)
+    print(resultados)
 
     #resultados = list(map(lambda x: calculate_error(**x),list(ParameterGrid(grid))))
 
