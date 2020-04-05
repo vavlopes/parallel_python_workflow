@@ -7,7 +7,6 @@ import os
 
 # Soft modification to test git usabillity
 
-
 def calculate_error(dia, thresh_up, thresh_bot):
     filtered = df.loc[df['dia'] == dia]
     filtered = filtered.assign(prob_thresh=np.nan,
@@ -52,12 +51,12 @@ if __name__ == "__main__":
 
 	
     lista_iteravel = list(ParameterGrid(grid))
-    pool = multiprocessing.Pool(4)
+    pool = multiprocessing.Pool(3)
     resultados = pool.map(calculate_parallel,lista_iteravel)
 
     #resultados = list(map(lambda x: calculate_error(**x),list(ParameterGrid(grid))))
 
-
+"""
 Ideias de melhora PDD
 
 Primeiro de tudo avaliar o resultado e depois verificar necessidade de melhorar a modelagem. Construir variáveis olhando para o passado pode ser muito bom.
@@ -78,3 +77,4 @@ Problema: Os arqujivos para predição diária não contemplam os estados anteri
 
 4. Usar Log(Atraso).
 
+"""
