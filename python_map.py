@@ -6,6 +6,9 @@ import multiprocessing
 import os
 
 # Soft modification to test git usabillity
+# Appending past modification into current state
+# Lets see what happen
+
 
 def calculate_error(dia, thresh_up, thresh_bot):
     filtered = df.loc[df['dia'] == dia]
