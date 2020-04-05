@@ -7,6 +7,10 @@ import dask
 # Soft modification to test git usabillity
 # Appending past modification into current state
 # Lets see what happen
+<<<<<<< HEAD
+=======
+
+>>>>>>> old-project-state
 
 
 @dask.delayed
