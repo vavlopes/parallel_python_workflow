@@ -5,6 +5,9 @@ from sklearn.model_selection import ParameterGrid
 import dask
 
 # Soft modification to test git usabillity
+# Appending past modification into current state
+# Lets see what happen
+
 
 @dask.delayed
 def calculate_error(dia, thresh_up, thresh_bot):
