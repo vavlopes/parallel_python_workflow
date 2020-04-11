@@ -46,19 +46,13 @@ if __name__ == "__main__":
                     'valor_montante':valor})
 
     grid = [{'dia':df.dia.unique(),
-            'thresh_up':np.arange(0.5,1.1,0.1),
-            'thresh_bot':np.arange(0,0.6,0.1)}]
+            'thresh_up':np.arange(0.5,1.1,0.05),
+            'thresh_bot':np.arange(0,0.6,0.05)}]
 
-	
     lista_iteravel = list(ParameterGrid(grid))
     resultados = list(map(lambda x: calculate_error(**x),lista_iteravel))
-    #total = dask.delayed(sum)(resultados)
-    #total.compute(scheduler='processes',num_workers = 3)
-
-    resultados = dask.compute(*resultados, num_workers = 2)
+    resultados = dask.compute(*resultados, num_workers = 3)
     print(resultados)
-
-    #resultados = list(map(lambda x: calculate_error(**x),list(ParameterGrid(grid))))
 
 """
 Ideias de melhora PDD
