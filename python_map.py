@@ -51,28 +51,5 @@ if __name__ == "__main__":
 
     lista_iteravel = list(ParameterGrid(grid))
     resultados = list(map(lambda x: calculate_error(**x),lista_iteravel))
-    resultados = dask.compute(*resultados, num_workers = 3)
+    resultados = dask.compute(*resultados, num_workers = 4)
     print(resultados)
-
-"""
-Ideias de melhora PDD
-
-Primeiro de tudo avaliar o resultado e depois verificar necessidade de melhorar a modelagem. Construir variáveis olhando para o passado pode ser muito bom.
-Mas pode dar trabalho excessivo num momento que estamos sem tempo.
-
-1 - Criar uma variável binária para indicar se houve corte ou não dentro do mês. Como fazer isso se o CORTE_5, que é o mais próximo que temos do corte pontual dentro do mês,
-some depois de 5 dias ? As 4 variáveis de corte já não deveriam pegar esse efeito ?
--> Trazer a data do corte nas ações de cobrança
--> Agrupar os arquivos e verificar existência de corte para aquele documento (viável para entrantes, inviável para saintes)
-
-2 -  Contabilizar variação de algumas variáveis em relação ao registro anterior (QTD_ACOES, QTD_ACOES_ANTERIOR, DELTA_DFDMES (captura a quantidade de dias entre variações nas ações de cobrança). Como fazer isso 
-sem todos os registros do mes empilhados ?
-
-Empilhar registros de to_predict só é possível para entrantes por causa da memória consumida. Se empilhados é só pegar a prob predita em max DFDMES e usar um PROCV de documento probabilidade predita.
-
-3 - Usar time lag nas variáveis.
-Problema: Os arqujivos para predição diária não contemplam os estados anteriores dos documentos no mesmo mês. Para viabilizar teríamos de agregar os arquivos e contabilizar as variações.
-
-4. Usar Log(Atraso).
-
-"""
